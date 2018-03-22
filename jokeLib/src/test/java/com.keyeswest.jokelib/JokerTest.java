@@ -7,13 +7,9 @@ import org.junit.Test;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import static org.junit.Assert.assertEquals;
-
 public class JokerTest {
 
     private final static int NUMBER_OF_JOKES = Joker.GET_NUMBER_OF_JOKES;
-
-
 
     @Test
     public void simpleJokeTest(){
@@ -61,9 +57,6 @@ public class JokerTest {
             int count = jokeHash.get(key);
             Assert.assertTrue(count == 2);
         }
-
-
     }
-
 
 }
