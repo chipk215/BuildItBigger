@@ -26,7 +26,7 @@ public class JokerTest {
         Joker joker = new Joker();
         for (int i=0; i< NUMBER_OF_JOKES; i++){
             String joke = joker.getJoke();
-            // presume we can get unique hash values for this small set of strings
+            // presume ;) we can get unique hash values for this small set of strings
             int hash = joke.hashCode();
             Assert.assertTrue(! jokeHash.containsKey(hash));
             jokeHash.put(hash, true);
