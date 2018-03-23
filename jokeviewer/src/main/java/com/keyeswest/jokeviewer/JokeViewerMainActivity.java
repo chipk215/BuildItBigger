@@ -6,15 +6,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+public class JokeViewerMainActivity extends AppCompatActivity {
 
     public final static String JOKE_KEY = "com.keyeswest.jokeviewer.joke_key";
 
+    public final static String RESPONSE_EXTRA = "com.keyeswest.jokeviewer.response_extra";
+
     public static Intent newIntent(Context packageContext, String joke){
-        Intent intent = new Intent(packageContext, MainActivity.class);
+        Intent intent = new Intent(packageContext, JokeViewerMainActivity.class);
         intent.putExtra(JOKE_KEY, joke);
 
         return intent;
+    }
+
+    public static boolean moreJokes(Intent result){
+        return result.getBooleanExtra(RESPONSE_EXTRA, false);
     }
 
 
@@ -23,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.joke_viewer_main_activity);
 
         if (savedInstanceState != null) {
             mJoke = savedInstanceState.getString(JOKE_KEY);
@@ -33,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        MainActivityFragment mainFragment = MainActivityFragment.newInstance(mJoke);
+        JokeViewerMainActivityFragment mainFragment = JokeViewerMainActivityFragment.newInstance(mJoke);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .add(R.id.joke_container, mainFragment)

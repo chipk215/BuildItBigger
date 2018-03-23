@@ -1,14 +1,24 @@
 package com.udacity.gradle.builditbigger;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+
+import com.keyeswest.jokeviewer.JokeViewerMainActivity;
 
 
 public class MainActivity extends AppCompatActivity {
+    private final static String TAG="APP MainActivity";
+
+    private int mJokeCount = 1;
+
+    private final static int REQUEST_DISPLAY_JOKE = 0;
+    private boolean mMoreJokes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +49,38 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK){
+            return;
+        }
+        if (requestCode == REQUEST_DISPLAY_JOKE){
+            if (data == null){
+                return;
+            }
+            mMoreJokes = JokeViewerMainActivity.moreJokes(data);
+            Log.d(TAG, "More Jokes:" + Boolean.toString(mMoreJokes));
+            if (mMoreJokes){
+                mJokeCount++;
+                sendDisplayRequest("Joke number: " + Integer.toString(mJokeCount));
+            }
+        }
+    }
+
+
+
+
+
     public void tellJoke(View view) {
-        Toast.makeText(this, "derp", Toast.LENGTH_SHORT).show();
+     //   Toast.makeText(this, "derp", Toast.LENGTH_SHORT).show();
+        sendDisplayRequest("First Joke");
+
+    }
+
+    private void sendDisplayRequest(String joke){
+        Intent intent = JokeViewerMainActivity.newIntent(this,joke);
+        startActivityForResult(intent, REQUEST_DISPLAY_JOKE);
     }
 
 
