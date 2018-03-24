@@ -2,7 +2,9 @@ package com.udacity.gradle.builditbigger;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
@@ -10,16 +12,30 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
+import com.keyeswest.jokeviewer.JokeViewerMainActivity;
 import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 import java.io.IOException;
 
-public class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
+public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
+    private static final String TAG = "EndpointsAsyncTask";
     private static MyApi myApiService = null;
-    private Context context;
+    private Context mContext;
+    private ResultsCallback mCallback;
+
+    public interface ResultsCallback{
+        void jokeResult(String joke);
+
+        void networkErrorOccurred();
+    }
+
+    public EndpointsAsyncTask(Context context, ResultsCallback callback){
+        mContext = context;
+        mCallback = callback;
+    }
 
     @Override
-    protected String doInBackground(Pair<Context, String>... params) {
+    protected String doInBackground(Void... params) {
         if(myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -38,18 +54,22 @@ public class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, S
             myApiService = builder.build();
         }
 
-        context = params[0].first;
-        String name = params[0].second;
+
+
 
         try {
-            return myApiService.sayHi(name).execute().getData();
+            return myApiService.getJoke().execute().getData();
         } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+
             return e.getMessage();
         }
     }
 
     @Override
     protected void onPostExecute(String result) {
-        Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+       mCallback.jokeResult(result);
     }
+
+
 }

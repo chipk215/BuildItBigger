@@ -1,21 +1,32 @@
 package com.udacity.gradle.builditbigger;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.keyeswest.jokeviewer.JokeViewerMainActivity;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements
+        EndpointsAsyncTask.ResultsCallback, View.OnClickListener {
+    private final static String TAG="MainActivityFragment";
+
+    private final static int REQUEST_DISPLAY_JOKE = 0;
+
+    private boolean mMoreJokes;
 
     public MainActivityFragment() {
     }
@@ -34,7 +45,52 @@ public class MainActivityFragment extends Fragment {
                 .build();
         mAdView.loadAd(adRequest);
 
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(getContext(), "Manfred"));
+        Button jokeButton = root.findViewById(R.id.joke_btn);
+        jokeButton.setOnClickListener(this);
+
+
         return root;
+    }
+
+    @Override
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.joke_btn:
+                new EndpointsAsyncTask(getContext(), this).execute();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK){
+            return;
+        }
+        if (requestCode == REQUEST_DISPLAY_JOKE){
+            if (data == null){
+                return;
+            }
+            mMoreJokes = JokeViewerMainActivity.moreJokes(data);
+            Log.d(TAG, "More Jokes:" + Boolean.toString(mMoreJokes));
+            if (mMoreJokes){
+                new EndpointsAsyncTask(getContext(), this).execute();
+
+            }
+        }
+    }
+
+    private void sendDisplayRequest(String joke){
+        Intent intent = JokeViewerMainActivity.newIntent(getContext(),joke);
+        startActivityForResult(intent, REQUEST_DISPLAY_JOKE);
+    }
+
+    @Override
+    public void jokeResult(String joke) {
+        sendDisplayRequest(joke);
+    }
+
+    @Override
+    public void networkErrorOccurred() {
+
     }
 }
