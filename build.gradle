@@ -22,9 +22,16 @@ allprojects {
 }
 
 
+task startServer{
+    dependsOn ':backend:appengineStart'
+    doLast{
+        println("startserver done")
+    }
+}
+
 task execTests{
     dependsOn ':app:connectedAndroidTest'
-    mustRunAfter ':backend:appengineStart'
+    mustRunAfter ':startServer'
     doLast{
         println("execTests done")
     }
@@ -43,8 +50,9 @@ task stopServer{
 task runTests{
     evaluationDependsOn ":backend"
 
+    dependsOn startServer
     dependsOn execTests
-   // dependsOn stopServer
+    dependsOn stopServer
     doLast{
         println("runTests done.")
     }
