@@ -35,6 +35,7 @@ public class EndpointsAsyncTaskTest  {
                         // we don't know what joke we are going to get since we are
                         // not mocking the library
                         Assert.assertNotNull(joke);
+                        Assert.assertTrue(!joke.isEmpty());
                         signal.countDown();
                     }
 
