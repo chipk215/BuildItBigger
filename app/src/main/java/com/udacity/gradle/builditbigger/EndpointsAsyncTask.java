@@ -1,9 +1,13 @@
 package com.udacity.gradle.builditbigger;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -14,11 +18,15 @@ import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 import java.io.IOException;
 
+@SuppressLint("StaticFieldLeak")
 public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
     private static final String TAG = "EndpointsAsyncTask";
     private static MyApi myApiService = null;
-    private Context mContext;
-    private ResultsCallback mCallback;
+
+    private final ResultsCallback mCallback;
+
+    @javax.annotation.Nullable
+    private final ProgressBar mProgressBar;
 
     public interface ResultsCallback{
         void jokeResult(String joke);
@@ -26,13 +34,22 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
         void networkErrorOccurred();
     }
 
-    public EndpointsAsyncTask(Context context, ResultsCallback callback){
-        mContext = context;
+    public EndpointsAsyncTask( ResultsCallback callback,
+                              @Nullable ProgressBar progressBar ) {
+
         mCallback = callback;
+        mProgressBar = progressBar;
     }
 
     @Override
-    protected String doInBackground(Void... params) {
+    protected void onPreExecute(){
+        if (mProgressBar != null){
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected String doInBackground(Void... params)  {
         if(myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -51,8 +68,6 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
             myApiService = builder.build();
         }
 
-
-
         try {
             return myApiService.getJoke().execute().getData();
         } catch (IOException e) {
@@ -64,7 +79,10 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-       mCallback.jokeResult(result);
+        if(mProgressBar != null){
+            mProgressBar.setVisibility(View.GONE);
+        }
+        mCallback.jokeResult(result);
     }
 
 

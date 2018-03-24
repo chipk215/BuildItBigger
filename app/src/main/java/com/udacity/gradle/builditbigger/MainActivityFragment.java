@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -25,6 +26,8 @@ public class MainActivityFragment extends Fragment implements
     private final static String TAG="MainActivityFragment";
 
     private final static int REQUEST_DISPLAY_JOKE = 0;
+
+    private ProgressBar mProgressSpinner;
 
     private boolean mMoreJokes;
 
@@ -48,6 +51,8 @@ public class MainActivityFragment extends Fragment implements
         Button jokeButton = root.findViewById(R.id.joke_btn);
         jokeButton.setOnClickListener(this);
 
+        mProgressSpinner = root.findViewById(R.id.progressBar);
+        mProgressSpinner.setVisibility(View.GONE);
 
         return root;
     }
@@ -56,7 +61,7 @@ public class MainActivityFragment extends Fragment implements
     public void onClick(View v){
         switch (v.getId()){
             case R.id.joke_btn:
-                new EndpointsAsyncTask(getContext(), this).execute();
+                getJoke();
         }
     }
 
@@ -73,7 +78,7 @@ public class MainActivityFragment extends Fragment implements
             mMoreJokes = JokeViewerMainActivity.moreJokes(data);
             Log.d(TAG, "More Jokes:" + Boolean.toString(mMoreJokes));
             if (mMoreJokes){
-                new EndpointsAsyncTask(getContext(), this).execute();
+                getJoke();
 
             }
         }
@@ -82,6 +87,10 @@ public class MainActivityFragment extends Fragment implements
     private void sendDisplayRequest(String joke){
         Intent intent = JokeViewerMainActivity.newIntent(getContext(),joke);
         startActivityForResult(intent, REQUEST_DISPLAY_JOKE);
+    }
+
+    private void getJoke(){
+        new EndpointsAsyncTask(this, mProgressSpinner).execute();
     }
 
     @Override

@@ -26,8 +26,8 @@ public class EndpointsAsyncTaskTest  {
 
             @Override
             public void run() {
-                Context testContext = InstrumentationRegistry.getContext();
-                EndpointsAsyncTask task = new EndpointsAsyncTask(testContext,
+
+                EndpointsAsyncTask task = new EndpointsAsyncTask(
                         new EndpointsAsyncTask.ResultsCallback() {
 
                     @Override
@@ -43,7 +43,7 @@ public class EndpointsAsyncTaskTest  {
                     public void networkErrorOccurred() {
                         Assert.fail();
                     }
-                });
+                }, null);
                 task.execute();
             }
         });
