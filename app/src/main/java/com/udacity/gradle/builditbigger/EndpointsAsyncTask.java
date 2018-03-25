@@ -60,6 +60,7 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
         if (! NetworkUtilities.isNetworkAvailable(mContext)){
             mCallback.networkErrorOccurred();
             cancel(true);
+            return;
         }
 
         if (mProgressBar != null){
