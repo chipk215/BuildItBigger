@@ -2,6 +2,7 @@ package com.udacity.gradle.builditbigger;
 
 import android.annotation.SuppressLint;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.test.espresso.IdlingResource;
@@ -30,6 +31,10 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     private final ResultsCallback mCallback;
 
+    private final Context mContext;
+
+    private boolean mErrorOccurred;
+
     @javax.annotation.Nullable
     private final ProgressBar mProgressBar;
 
@@ -39,15 +44,24 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
         void networkErrorOccurred();
     }
 
-    public EndpointsAsyncTask( ResultsCallback callback,
+    public EndpointsAsyncTask(Context context,  ResultsCallback callback,
                               @Nullable ProgressBar progressBar ) {
 
         mCallback = callback;
         mProgressBar = progressBar;
+        mContext = context;
+        mErrorOccurred = false;
     }
 
     @Override
     protected void onPreExecute(){
+
+        // check network connectivity
+        if (! NetworkUtilities.isNetworkAvailable(mContext)){
+            mCallback.networkErrorOccurred();
+            cancel(true);
+        }
+
         if (mProgressBar != null){
             mProgressBar.setVisibility(View.VISIBLE);
         }
@@ -81,7 +95,7 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
             return myApiService.getJoke().execute().getData();
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
-
+            mErrorOccurred = true;
             return e.getMessage();
         }
     }
@@ -95,7 +109,13 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
         if (mIdlingResource!= null) {
             EspressoTestingIdlingResource.decrement();
         }
-        mCallback.jokeResult(result);
+
+        if (mErrorOccurred){
+            mCallback.networkErrorOccurred();
+        }else{
+            mCallback.jokeResult(result);
+        }
+
     }
 
 

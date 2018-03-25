@@ -42,7 +42,7 @@ public class EndpointsAsyncTaskTest  {
             @Override
             public void run() {
 
-                EndpointsAsyncTask task = new EndpointsAsyncTask(
+                EndpointsAsyncTask task = new EndpointsAsyncTask(InstrumentationRegistry.getTargetContext(),
                         new EndpointsAsyncTask.ResultsCallback() {
 
                     @Override
