@@ -33,8 +33,6 @@ public class MainActivityIntentsTest {
         //click the joke button
         onView(withId(R.id.joke_btn)).perform(click());
 
-        intended(toPackage("com.udacity.gradle.builditbigger.free"));
-
         intended(hasExtras(hasEntry(equalTo(JokeViewerMainActivity.JOKE_KEY), instanceOf(String.class))));
 
     }

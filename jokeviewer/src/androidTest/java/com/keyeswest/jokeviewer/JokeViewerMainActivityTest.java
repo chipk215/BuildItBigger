@@ -57,7 +57,7 @@ public class JokeViewerMainActivityTest {
 
     }
 
-    @Ignore("This test implementation is not working...")
+    @Ignore("This test implementation is not working. It appears returned intents are note recorded.")
     @Test
     public void validateNoMoreJokesTest(){
 

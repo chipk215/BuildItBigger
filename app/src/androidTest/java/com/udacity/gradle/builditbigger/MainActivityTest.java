@@ -48,8 +48,6 @@ public class MainActivityTest {
         onView(withId(R.id.joke_btn)).check(matches(isEnabled()));
 
 
-        // verify ad view is visisble
-        onView(withId(R.id.adView)).check(matches(isDisplayed()));
 
     }
 
