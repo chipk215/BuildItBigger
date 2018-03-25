@@ -2,10 +2,13 @@ package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import junit.framework.Assert;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -17,6 +20,18 @@ public class EndpointsAsyncTaskTest  {
 
     private CountDownLatch signal;
     private static long TIME_OUT_SECONDS = 30;
+
+    @Before
+    public void init() throws InterruptedException{
+
+        // let espresso know to synchronize with background tasks
+        IdlingRegistry.getInstance().register(EspressoTestingIdlingResource.getIdlingResource());
+    }
+
+    @After
+    public void unregisterIdlingResource(){
+        IdlingRegistry.getInstance().unregister(EspressoTestingIdlingResource.getIdlingResource());
+    }
 
     @Test
     public void happyPathGetJokeTest() throws Throwable{

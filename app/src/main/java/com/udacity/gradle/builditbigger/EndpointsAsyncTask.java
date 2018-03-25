@@ -1,10 +1,10 @@
 package com.udacity.gradle.builditbigger;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.support.test.espresso.IdlingResource;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -22,6 +22,11 @@ import java.io.IOException;
 public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
     private static final String TAG = "EndpointsAsyncTask";
     private static MyApi myApiService = null;
+
+
+    @Nullable
+    private final IdlingResource mIdlingResource =
+            EspressoTestingIdlingResource.getIdlingResource();
 
     private final ResultsCallback mCallback;
 
@@ -45,6 +50,10 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
     protected void onPreExecute(){
         if (mProgressBar != null){
             mProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        if (mIdlingResource != null){
+            EspressoTestingIdlingResource.increment();
         }
     }
 
@@ -81,6 +90,10 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String result) {
         if(mProgressBar != null){
             mProgressBar.setVisibility(View.GONE);
+        }
+
+        if (mIdlingResource!= null) {
+            EspressoTestingIdlingResource.decrement();
         }
         mCallback.jokeResult(result);
     }

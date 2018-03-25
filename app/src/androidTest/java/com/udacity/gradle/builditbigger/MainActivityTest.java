@@ -2,10 +2,13 @@ package com.udacity.gradle.builditbigger;
 
 
 
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +33,18 @@ public class MainActivityTest {
             new ActivityTestRule<>(MainActivity.class, false, false);
 
 
+    @Before
+    public void init() throws InterruptedException{
+
+        // let espresso know to synchronize with background tasks
+        IdlingRegistry.getInstance().register(EspressoTestingIdlingResource.getIdlingResource());
+    }
+
+    @After
+    public void unregisterIdlingResource(){
+        IdlingRegistry.getInstance().unregister(EspressoTestingIdlingResource.getIdlingResource());
+    }
+
 
     @Test
     public void launchMainActivityTest(){
@@ -46,8 +61,6 @@ public class MainActivityTest {
         onView(withId(R.id.joke_btn)).check(matches(isDisplayed()));
         // verify previous button is enabled
         onView(withId(R.id.joke_btn)).check(matches(isEnabled()));
-
-
 
     }
 
