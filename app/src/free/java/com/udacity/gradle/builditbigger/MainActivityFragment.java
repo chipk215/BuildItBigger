@@ -17,6 +17,7 @@ public class MainActivityFragment extends MainActivityBaseFragment {
 
 
     public MainActivityFragment() {
+        super();
     }
 
     @Override
