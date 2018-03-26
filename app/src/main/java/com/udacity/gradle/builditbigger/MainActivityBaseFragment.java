@@ -68,12 +68,12 @@ public abstract class MainActivityBaseFragment extends Fragment implements
         }
     }
 
-    private void sendDisplayRequest(String joke){
+    protected void sendDisplayRequest(String joke){
         Intent intent = JokeViewerMainActivity.newIntent(getContext(),joke);
         startActivityForResult(intent, REQUEST_DISPLAY_JOKE);
     }
 
-    private void getJoke(){
+    protected void getJoke(){
         new EndpointsAsyncTask(getContext(),this, mProgressSpinner).execute();
     }
 
