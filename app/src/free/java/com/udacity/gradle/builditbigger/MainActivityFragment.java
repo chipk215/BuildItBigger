@@ -3,6 +3,8 @@ package com.udacity.gradle.builditbigger;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.test.espresso.IdlingResource;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,9 @@ public class MainActivityFragment extends MainActivityBaseFragment {
                              Bundle savedInstanceState) {
 
         View root = super.onCreateView(inflater, container, savedInstanceState);
+
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
 
         //Interstitial Setup
         mInterstitialAd = new InterstitialAd(getActivity());
