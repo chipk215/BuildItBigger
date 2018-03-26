@@ -11,17 +11,11 @@ public class JokeViewerMainActivity extends AppCompatActivity {
 
     public final static String JOKE_KEY = "com.keyeswest.jokeviewer.joke_key";
 
-    public final static String RESPONSE_EXTRA = "com.keyeswest.jokeviewer.response_extra";
-
     public static Intent newIntent(Context packageContext, String joke){
         Intent intent = new Intent(packageContext, JokeViewerMainActivity.class);
         intent.putExtra(JOKE_KEY, joke);
 
         return intent;
-    }
-
-    public static boolean moreJokes(Intent result){
-        return result.getBooleanExtra(RESPONSE_EXTRA, false);
     }
 
 
