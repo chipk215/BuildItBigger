@@ -1,6 +1,5 @@
 package com.udacity.gradle.builditbigger;
 
-import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -12,8 +11,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +23,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.AllOf.allOf;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -38,18 +34,6 @@ public class MainActivityFreeTest {
             new ActivityTestRule<>(MainActivity.class, false, false);
 
 
-    @Before
-    public void init() throws InterruptedException{
-
-        // let espresso know to synchronize with background tasks
-        IdlingRegistry.getInstance().register(EspressoTestingIdlingResource.getInterstitialIdlingResource());
-    }
-
-    @After
-    public void unregisterIdlingResource(){
-        IdlingRegistry.getInstance().unregister(EspressoTestingIdlingResource.getInterstitialIdlingResource());
-    }
-
 
     @Test
     public void launchMainActivityTest() throws InterruptedException{
@@ -60,6 +44,7 @@ public class MainActivityFreeTest {
         // verify ad view is visible
         onView(withId(R.id.adView)).check(matches(isDisplayed()));
 
+        // revisit
         Thread.sleep(1000);
 
         //click the joke button

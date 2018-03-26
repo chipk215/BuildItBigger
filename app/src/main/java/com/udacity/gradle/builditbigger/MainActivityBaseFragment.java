@@ -1,13 +1,9 @@
 package com.udacity.gradle.builditbigger;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +19,6 @@ public abstract class MainActivityBaseFragment extends Fragment implements
 
     protected final static String TAG="MainActivityFragment";
 
-    protected final static int REQUEST_DISPLAY_JOKE = 0;
 
     protected ProgressBar mProgressSpinner;
 
@@ -51,28 +46,10 @@ public abstract class MainActivityBaseFragment extends Fragment implements
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK){
-            return;
-        }
-        if (requestCode == REQUEST_DISPLAY_JOKE){
-            if (data == null){
-                return;
-            }
-            mMoreJokes = JokeViewerMainActivity.moreJokes(data);
-            Log.d(TAG, "More Jokes:" + Boolean.toString(mMoreJokes));
-            if (mMoreJokes){
-                getJoke();
-
-            }
-        }
-    }
 
     protected void sendDisplayRequest(String joke){
         Intent intent = JokeViewerMainActivity.newIntent(getContext(),joke);
-        startActivityForResult(intent, REQUEST_DISPLAY_JOKE);
+        startActivity(intent);
     }
 
     protected void getJoke(){
@@ -101,7 +78,6 @@ public abstract class MainActivityBaseFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
-
 
         Button jokeButton = root.findViewById(R.id.joke_btn);
         jokeButton.setOnClickListener(this);
