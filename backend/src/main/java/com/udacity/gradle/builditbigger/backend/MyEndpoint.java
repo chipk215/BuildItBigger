@@ -21,7 +21,7 @@ public class MyEndpoint {
     // using a single instance will rotate jokes
     private final static Joker sJOKER = new Joker();
 
-    /** A simple endpoint method that takes a name and says Hi back */
+
     @ApiMethod(name = "getJoke")
     public MyBean getJoke() {
         String joke = sJOKER.getJoke();

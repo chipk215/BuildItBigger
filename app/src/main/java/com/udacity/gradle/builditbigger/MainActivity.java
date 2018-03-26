@@ -14,7 +14,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-/*
+/*  Commenting out for now, the app is not using any menu functionality
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

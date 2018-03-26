@@ -29,8 +29,6 @@ public abstract class MainActivityBaseFragment extends Fragment implements
 
     private TextView mErrorText;
 
-    private Button mRetryButton;
-
     private AsyncTask<Void, Void, String> mTask;
 
 
@@ -78,6 +76,9 @@ public abstract class MainActivityBaseFragment extends Fragment implements
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
+
+        //note - so few view properties.. did not bring in ButterKnife
+
         Button jokeButton = root.findViewById(R.id.joke_btn);
         jokeButton.setOnClickListener(this);
 
@@ -86,8 +87,8 @@ public abstract class MainActivityBaseFragment extends Fragment implements
 
         mErrorLayout = root.findViewById(R.id.error_layout);
         mErrorText = root.findViewById(R.id.error_txt_cause);
-        mRetryButton = root.findViewById(R.id.error_btn_retry);
-        mRetryButton.setOnClickListener(this);
+        Button retryButton = root.findViewById(R.id.error_btn_retry);
+        retryButton.setOnClickListener(this);
         mErrorLayout.setVisibility(View.GONE);
 
         return root;
