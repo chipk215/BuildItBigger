@@ -1,12 +1,16 @@
 package com.udacity.gradle.builditbigger;
 
-
 import android.content.Intent;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
+
 import android.support.v4.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -19,18 +23,15 @@ public abstract class MainActivityBaseFragment extends Fragment implements
 
     protected final static String TAG="MainActivityFragment";
 
-
     protected ProgressBar mProgressSpinner;
 
-    protected boolean mMoreJokes;
-
-
     protected LinearLayout mErrorLayout;
-
 
     protected TextView mErrorText;
 
     protected Button mRetryButton;
+
+    private AsyncTask<Void, Void, String> mTask;
 
 
     @Override
@@ -42,7 +43,6 @@ public abstract class MainActivityBaseFragment extends Fragment implements
             case R.id.error_btn_retry:
                 getJoke();
                 break;
-
         }
     }
 
@@ -53,7 +53,7 @@ public abstract class MainActivityBaseFragment extends Fragment implements
     }
 
     protected void getJoke(){
-        new EndpointsAsyncTask(getContext(),this, mProgressSpinner).execute();
+        mTask = new EndpointsAsyncTask(getContext(),this, mProgressSpinner).execute();
     }
 
     @Override
@@ -69,10 +69,9 @@ public abstract class MainActivityBaseFragment extends Fragment implements
         if (mErrorLayout.getVisibility() == View.GONE){
             mErrorText.setText(getResources().getString(R.string.internet_error));
             mErrorLayout.setVisibility(View.VISIBLE);
-
         }
-
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,5 +91,14 @@ public abstract class MainActivityBaseFragment extends Fragment implements
         mErrorLayout.setVisibility(View.GONE);
 
         return root;
+    }
+
+    @Override
+    public void onDestroy(){
+        if (mTask != null){
+            mTask.cancel(true);
+        }
+
+        super.onDestroy();
     }
 }

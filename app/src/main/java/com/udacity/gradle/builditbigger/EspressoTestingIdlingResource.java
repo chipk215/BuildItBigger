@@ -10,8 +10,6 @@ public class EspressoTestingIdlingResource {
     private static CountingIdlingResource mCountingIdlingResource =
             new CountingIdlingResource(RESOURCE);
 
-    private static CountingIdlingResource mCountingInterstitialIdlingResource =
-            new CountingIdlingResource(RESOURCE);
 
     public static void increment() {
         mCountingIdlingResource.increment();
@@ -25,8 +23,6 @@ public class EspressoTestingIdlingResource {
         return mCountingIdlingResource;
     }
 
-    public static IdlingResource getInterstitialIdlingResource() {
-        return mCountingInterstitialIdlingResource;
-    }
+
 
 }

@@ -1,8 +1,8 @@
 package com.udacity.gradle.builditbigger;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.test.espresso.IdlingResource;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +19,12 @@ public class MainActivityFragment extends MainActivityBaseFragment {
 
     private String mJoke;
 
-
     private InterstitialAd mInterstitialAd;
+
+    @Nullable
+    private final IdlingResource mIdlingResource =
+            EspressoTestingIdlingResource.getIdlingResource();
+
     public MainActivityFragment() {
         super();
     }
@@ -29,15 +33,15 @@ public class MainActivityFragment extends MainActivityBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // Common create view code is in parent class
         View root = super.onCreateView(inflater, container, savedInstanceState);
-
 
         //Interstitial Setup
         mInterstitialAd = new InterstitialAd(getActivity());
         mInterstitialAd.setAdUnitId(AD_UNIT_ID);
 
         // view for banner ad
-        AdView mAdView = (AdView) root.findViewById(R.id.adView);
+        AdView mAdView = root.findViewById(R.id.adView);
 
         // Create an ad request. Check logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
@@ -48,20 +52,20 @@ public class MainActivityFragment extends MainActivityBaseFragment {
         mAdView.loadAd(adRequest);
 
 
-        // Set an AdListener.
+        // Set an AdListener
         mInterstitialAd.setAdListener(new AdListener() {
 
             @Override
             public void onAdLoaded() {
-
+                if (mIdlingResource != null) {
+                    EspressoTestingIdlingResource.decrement();
+                }
             }
 
             @Override
             public void onAdClosed() {
-
                 requestNewInterstitial();;
                 sendDisplayRequest(mJoke);
-
             }
         });
 
@@ -71,8 +75,11 @@ public class MainActivityFragment extends MainActivityBaseFragment {
     }
 
 
-
-
+    /**
+     * Override joke handler which has obtained joke from server to insert
+     * an interstitial ad before showing the user the joke.
+     * @param joke
+     */
     @Override
     public void jokeResult(String joke) {
         if (mErrorLayout.getVisibility() == View.VISIBLE){
@@ -89,6 +96,9 @@ public class MainActivityFragment extends MainActivityBaseFragment {
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
 
+        if (mIdlingResource != null) {
+            EspressoTestingIdlingResource.increment();
+        }
         mInterstitialAd.loadAd(adRequest);
     }
 
