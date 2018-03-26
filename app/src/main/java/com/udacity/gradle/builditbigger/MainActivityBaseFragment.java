@@ -23,13 +23,13 @@ public abstract class MainActivityBaseFragment extends Fragment implements
 
     protected final static String TAG="MainActivityFragment";
 
-    protected ProgressBar mProgressSpinner;
+    private ProgressBar mProgressSpinner;
 
     protected LinearLayout mErrorLayout;
 
-    protected TextView mErrorText;
+    private TextView mErrorText;
 
-    protected Button mRetryButton;
+    private Button mRetryButton;
 
     private AsyncTask<Void, Void, String> mTask;
 

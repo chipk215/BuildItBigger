@@ -14,6 +14,7 @@ public class NetworkUtilities {
         NetworkInfo networkInfo =
                 connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
 
+        //noinspection RedundantIfStatement
         if (networkInfo == null || !networkInfo.isConnected() ||
                 (networkInfo.getType() != ConnectivityManager.TYPE_WIFI
                         && networkInfo.getType() != ConnectivityManager.TYPE_MOBILE)) {

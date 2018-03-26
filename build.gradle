@@ -21,6 +21,14 @@ allprojects {
     }
 }
 
+ext{
+    googleApiClient = '1.23.0'
+    supportLibraryVersion ='26.1.0'
+    junitVersion = '4.12'
+    testRunnerVersion = '1.0.1'
+    coreEspressoVersion = '3.0.1'
+}
+
 
 task startServer{
     dependsOn ':backend:appengineStart'

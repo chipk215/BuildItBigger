@@ -46,28 +46,51 @@ android {
     }
 }
 
+ext{
+    supportLibraryVersion = "$rootProject.supportLibraryVersion"
+    googleApiClient = "$rootProject.googleApiClient"
+    googleFindBugs = '3.0.1'
+    googlePayServicesAds = '11.8.0'
+    junitVersion = "$rootProject.junitVersion"
+    testRunnerVersion = "$rootProject.testRunnerVersion"
+    coreEspressoVersion = "$rootProject.coreEspressoVersion"
+    supportAnnotations = "25.4.0"
+}
+
 
 dependencies {
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // support library
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+
+    //Google Cloud Endpoints
     endpointsServer project(path: ':backend', configuration: 'endpoints')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    freeImplementation 'com.google.android.gms:play-services-ads:11.8.0'
+    implementation "com.google.api-client:google-api-client:$googleApiClient"
+    implementation "com.google.http-client:google-http-client-android:$googleApiClient"
+    implementation "com.google.code.findbugs:jsr305:$googleFindBugs"
 
-    implementation 'com.google.api-client:google-api-client:1.23.0'
-    implementation 'com.google.http-client:google-http-client-android:1.23.0'
-    implementation 'com.google.code.findbugs:jsr305:3.0.1'
+    // Ads for free flavor
+    freeImplementation "com.google.android.gms:play-services-ads:$googlePayServicesAds"
 
+
+    // Android joke viewer library
     implementation project(":jokeviewer")
 
 
+    // ********************** Test Dependencies ******************************
+    testImplementation "junit:junit:$junitVersion"
 
-    testImplementation 'junit:junit:4.12'
+    androidTestImplementation "com.android.support.test:runner:$testRunnerVersion"
 
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:3.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.1'
-    compile 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
+    // Core Espresso
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$coreEspressoVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$coreEspressoVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$coreEspressoVersion"
+    compile "com.android.support.test.espresso:espresso-idling-resource:$coreEspressoVersion"
+
+
     // Force usage of dependencies in the test app, since it is internally used by the runner module.
-    androidTestCompile 'com.android.support:support-annotations:25.4.0'
+    androidTestImplementation "com.android.support:support-annotations:$supportAnnotations"
 }

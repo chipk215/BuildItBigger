@@ -21,8 +21,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class JokeViewerMainActivityTest {
 
-    private final static String TEST_JOKE="Q: How do astronomers organize a party? \n" +
-            "A: They planet.";
+    private final static String TEST_JOKE="Q: How do astronomers organize a party? "
+            + System.lineSeparator() + System.lineSeparator() + "A: They planet.";
 
     @Rule
     public ActivityTestRule mActivityTestRule =
